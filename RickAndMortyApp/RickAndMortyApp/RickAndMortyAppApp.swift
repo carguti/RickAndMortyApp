@@ -9,9 +9,8 @@ import SwiftUI
 
 @main
 struct RickAndMortyAppApp: App {
-    init() {
-        
-    }
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
             SplashScreenView()

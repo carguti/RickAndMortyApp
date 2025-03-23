@@ -8,8 +8,13 @@
 import Foundation
 
 final class SplashScreenInteractor {
+    @Inject var baseApiWebRepository: BaseApiWebRepository
+    @Inject var baseApiDBRepository: BaseApiDBRepository
+    
     func initialSynch() async throws {
-        try await Task.sleep(nanoseconds: 1_000_000_000)
-        //Dependencies.shared.provideDependencias()
+        Task {
+            let baseApi = try await baseApiWebRepository.getBaseApi()
+            try baseApiDBRepository.store(baseApi: baseApi)
+        }
     }
 }

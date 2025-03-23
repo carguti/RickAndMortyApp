@@ -1,0 +1,17 @@
+//
+//  RickAndMortyApp_Pro.xcconfig
+//  RickAndMortyApp
+//
+//  Created by Carlos Gutiérrez Casado on 23/3/25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+CONFIG_APP_NAME = Rick & Morty
+CONFIG_APP_VERSION = 1.0
+CONFIG_APP_BUILD_NUMBER = 1
+CONFIG_APP_BUNDLE_IDENTIFIER = CarlosGutierrezCasado.RickAndMortyApp
+APPICON_NAME = AppIcon
+
+BASE_URL = https://rickandmortyapi.com/api

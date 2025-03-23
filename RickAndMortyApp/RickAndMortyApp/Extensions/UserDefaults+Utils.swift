@@ -55,3 +55,24 @@ extension UserDefaults {
          }
      }
  }
+
+// MARK: - BaseApi
+extension UserDefaults {
+    struct UserDefaultsBaseApiKeys {
+        static let kBaseApi = "BaseApi"
+    }
+    
+    // MARK: - BaseApi retrieved data
+    var baseApi: BaseApi? {
+        get {
+            guard let baseApi = get(objectType: BaseApi.self, forKey: UserDefaultsBaseApiKeys.kBaseApi) else { return nil }
+            return baseApi
+        }
+        
+        set {
+            set(object: newValue, forKey: UserDefaultsBaseApiKeys.kBaseApi)
+            
+            synchronize()
+        }
+    }
+}
