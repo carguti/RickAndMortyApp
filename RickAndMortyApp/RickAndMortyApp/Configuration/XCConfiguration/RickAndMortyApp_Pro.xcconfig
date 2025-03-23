@@ -14,4 +14,4 @@ CONFIG_APP_BUILD_NUMBER = 1
 CONFIG_APP_BUNDLE_IDENTIFIER = CarlosGutierrezCasado.RickAndMortyApp
 APPICON_NAME = AppIcon
 
-BASE_URL = https://rickandmortyapi.com/api
+BASE_URL = https:/$()/rickandmortyapi.com/api
