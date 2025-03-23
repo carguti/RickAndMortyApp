@@ -12,7 +12,7 @@ struct ApplicationSwitcher: View {
         if (!UserDefaults.standard.onBoardingShown) {
              OnBoardingView()
         } else {
-             CharactersView()
+             MainView()
         }
     }
 }
