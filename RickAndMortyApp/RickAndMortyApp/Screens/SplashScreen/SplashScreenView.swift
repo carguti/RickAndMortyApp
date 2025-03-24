@@ -10,7 +10,6 @@ import SwiftUI
 struct SplashScreenView: View {
     @StateObject var splashScreenVM = SplashScreenVM()
     
-    
     var body: some View {
         if splashScreenVM.initialSynchCompleted {
             ApplicationSwitcher()
@@ -26,7 +25,10 @@ extension SplashScreenView {
     @ViewBuilder
     private var content: some View {
         ZStack {
-            Text("SplashScreen")
+            Image("SplashScreenBg")
+                .resizable()
+                .ignoresSafeArea()
+                .aspectRatio(contentMode: .fill)
         }
         .onAppear {
             splashScreenVM.doInitialSynch = true

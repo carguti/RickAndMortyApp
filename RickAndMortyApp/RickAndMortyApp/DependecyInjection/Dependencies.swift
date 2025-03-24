@@ -39,6 +39,7 @@ class Dependencies {
     
     private init(testMode: Bool) {
         baseApiDependencies(testMode: testMode)
+        getCharactersDependencies(testMode: testMode)
     }
     
     static func create(testMode: Bool) -> Dependencies {
@@ -56,6 +57,30 @@ extension Dependencies {
         } else {
             @Provider var baseApiWebRepository = RealBaseApiWebRepository(session: session, baseUrl: baseUrl) as BaseApiWebRepository
             @Provider var baseApiDDBBRepository = RealBaseApiDBRepository() as BaseApiDBRepository
+        }
+    }
+}
+
+// MARK: - Characters dependencies
+
+extension Dependencies {
+    
+    private func getCharactersDependencies(testMode: Bool = false) {
+        @Inject var baseApiDBRepository: BaseApiDBRepository
+        
+        if testMode {
+            @Provider var baseApiWebRepository = MockCharacterWebRepository() as CharacterWebRepository
+            //@Provider var baseApiDDBBRepository = MockCharacterRepository() as BaseApiDBRepository
+        } else {
+            Task {
+                guard let charactersUrl = try baseApiDBRepository.getBaseApi()?.characters else {
+                    return
+                }
+                
+                @Provider var baseApiWebRepository = RealCharacterWebRepository(session: session, baseUrl: charactersUrl) as CharacterWebRepository
+            }
+            
+            //@Provider var baseApiDDBBRepository = RealCharacterDBRepository() as BaseApiDBRepository
         }
     }
 }
