@@ -14,6 +14,7 @@ struct CharactersView: View {
     @State private var gridSize: GridSize = .two
     @State private var selectedCharacter: Character?
     @State private var isSheetPresented = false
+    var currentPage: Int = 1
     
     var filteredCharacters: [Character] {
         if searchText.isEmpty {
@@ -50,8 +51,10 @@ struct CharactersView: View {
                         ForEach(filteredCharacters, id: \.id) { item in
                             GridCell(character: item)
                                 .onTapGesture {
-                                    selectedCharacter = item
-                                    isSheetPresented = true
+                                    DispatchQueue.main.async {
+                                        self.selectedCharacter = item
+                                        self.isSheetPresented = true
+                                    }
                                 }
                         }
                     }
@@ -61,7 +64,10 @@ struct CharactersView: View {
             }
             .padding(.vertical, 40)
         }
-        .sheet(isPresented: $isSheetPresented) {
+        .sheet(isPresented: Binding(
+            get: { isSheetPresented && selectedCharacter != nil },
+            set: { isSheetPresented = $0 }
+        )) {
             if let character = selectedCharacter {
                 CharacterDetailView(character: character)
             }

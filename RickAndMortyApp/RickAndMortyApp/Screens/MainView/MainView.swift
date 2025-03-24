@@ -12,25 +12,20 @@ struct MainView: View {
         TabView {
             CharactersView()
                 .tabItem {
-                    Label("Characters", systemImage: "list.dash")
+                    Label("Characters", systemImage: "person")
                 }
             
             LocationsView()
                 .tabItem {
-                    Label("Locations", systemImage: "list.dash")
+                    Label("Locations", systemImage: "location")
                 }
             
             EpisodesView()
                 .tabItem {
-                    Label("Episodes", systemImage: "list.dash")
-                }
-            
-            
-            FavsView()
-                .tabItem {
-                    Label("Favs", systemImage: "list.dash")
+                    Label("Episodes", systemImage: "play.square.stack")
                 }
         }
+        .accentColor(.black)
     }
 }
 

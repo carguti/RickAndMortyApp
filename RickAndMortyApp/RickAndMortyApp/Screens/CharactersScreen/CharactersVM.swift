@@ -9,11 +9,23 @@ import Foundation
 
 final class CharactersVM: NSObject, ObservableObject {
     
-    private let charactersInteractor = CharactersInteractor()
+    private var charactersInteractor = CharactersInteractor()
     
     var characterResponse: CharacterResponse?
     @Published var characters: [Character] = []
     @Published var isLoading = false
+    
+    // Default initializer (without parameters)
+    override init() {
+        self.charactersInteractor = CharactersInteractor() // Default interactor
+        super.init()
+    }
+    
+    // Initializer with a custom interactor (for testing)
+    init(charactersInteractor: CharactersInteractor) {
+        self.charactersInteractor = charactersInteractor
+        super.init()
+    }
     
     @MainActor
     func getCharacters() async throws {

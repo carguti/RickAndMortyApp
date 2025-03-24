@@ -18,17 +18,14 @@ extension OnBoardingView {
     @ViewBuilder
     private var content: some View {
         VStack {
-            Text("OnBoarding View")
-            
-            Button {
-                onBoardingVM.updateFirstLaunch()
-            } label: {
-                Text("Lo tengo!")
-            }
-
+            Image("SplashScreenBg")
+                .resizable()
+                .ignoresSafeArea()
+                .aspectRatio(contentMode: .fill)
         }
-        
-        
+        .onAppear {
+            onBoardingVM.updateFirstLaunch()
+        }
     }
     
 }
