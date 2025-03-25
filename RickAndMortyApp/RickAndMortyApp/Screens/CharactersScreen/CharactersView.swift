@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CharactersView: View {
     @StateObject var charactersVM = CharactersVM()
+    @State private var filterOptions = FilterOptions()
+    @State private var isFilterPresented = false
     
     @State private var searchText: String = ""
     @State private var gridSize: GridSize = .two
@@ -28,7 +30,7 @@ struct CharactersView: View {
         ZStack {
             VStack {
                 HStack {
-                    FloatingPlaceholderTextField(text: $searchText, placeholder: "Search character")
+                    FloatingPlaceholderTextField(text: $searchText, placeholder: "Search character", isSearcheable: true)
                     
                     Spacer()
                     
@@ -39,6 +41,13 @@ struct CharactersView: View {
                         }
                     } label: {
                         Image(systemName: gridSize.icon()).imageScale(.large)
+                            .foregroundColor(.black)
+                            .frame(width: 30)
+                    }
+                    
+                    Button(action: { isFilterPresented = true }) {
+                        Image(systemName: "line.horizontal.3.decrease.circle")
+                            .imageScale(.large)
                             .foregroundColor(.black)
                             .frame(width: 30)
                     }
@@ -63,6 +72,22 @@ struct CharactersView: View {
                 }
             }
             .padding(.vertical, 40)
+            
+            
+            if isFilterPresented {
+                Color.black.opacity(0.3)
+                    .ignoresSafeArea()
+                    .onTapGesture { isFilterPresented = false }
+                
+                FilterView(
+                    filterOptions: $filterOptions,
+                    isPresented: $isFilterPresented,
+                    applyFilter: {
+                        charactersVM.fetchFilteredCharacters(with: filterOptions)
+                    }
+                )
+                .padding()
+            }
         }
         .sheet(isPresented: Binding(
             get: { isSheetPresented && selectedCharacter != nil },

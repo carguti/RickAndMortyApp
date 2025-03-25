@@ -42,4 +42,17 @@ final class CharactersVM: NSObject, ObservableObject {
     func filterCharacters(searchText: String) -> [Character] {
         return self.characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
+    
+    func fetchFilteredCharacters(with filterOptions: FilterOptions) {
+        Task {
+            do {
+                let response = try await charactersInteractor.getCharactersWithFilterOptions(filterOptions: filterOptions)
+                DispatchQueue.main.async {
+                    self.characters = response?.results ?? []
+                }
+            } catch {
+                print("Failed to fetch filtered characters: \(error)")
+            }
+        }
+    }
 }

@@ -15,6 +15,12 @@ class CharactersInteractor {
         
         return charactersResponse
     }
+    
+    func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse? {
+        let charactersResponse = try await characterWebRepository.getCharactersWithFilterOptions(filterOptions: filterOptions)
+        
+        return charactersResponse
+    }
 }
 
 // Mock for CharactersInteractor

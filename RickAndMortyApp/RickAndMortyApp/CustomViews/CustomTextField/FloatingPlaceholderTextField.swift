@@ -12,11 +12,12 @@ struct FloatingPlaceholderTextField: View {
     @FocusState private var isFocused: Bool
     
     var placeholder: String
+    var isSearcheable: Bool
     
     var body: some View {
         VStack(spacing: -2) {
             ZStack(alignment: .leading) {
-                Text(!isFocused ? placeholder : "Searching...")
+                Text(!isFocused ? placeholder : (isSearcheable ? "Searching..." : placeholder))
                     .foregroundColor(isFocused || !text.isEmpty ? Color.black : Color.black.opacity(0.2))
                     .font(isFocused || !text.isEmpty ? (.system(size: 16, weight: .regular)) : (.system(size: 20, weight: .regular)))
                     .offset(y: isFocused || !text.isEmpty ? -40 : 0)
@@ -37,6 +38,7 @@ struct FloatingPlaceholderTextField: View {
                             .foregroundColor(.black)
                             .padding(.trailing, 12)
                     }
+                    .opacity(isSearcheable ? 1 : 0)
                 }
                 .background(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
             }
@@ -46,6 +48,6 @@ struct FloatingPlaceholderTextField: View {
 }
 
 #Preview {
-    FloatingPlaceholderTextField(text: .constant("Rick"), placeholder: "Search character")
+    FloatingPlaceholderTextField(text: .constant("Rick"), placeholder: "Search character", isSearcheable: true)
 }
 

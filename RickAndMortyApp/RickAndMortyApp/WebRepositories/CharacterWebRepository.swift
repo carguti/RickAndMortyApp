@@ -10,6 +10,7 @@ import Foundation
 protocol CharacterWebRepository: WebRepository {
     func getCharacters() async throws -> CharacterResponse
     func getSingleCharacter() async throws -> Character
+    func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse
 }
 
 struct RealCharacterWebRepository: CharacterWebRepository {
@@ -24,6 +25,11 @@ struct RealCharacterWebRepository: CharacterWebRepository {
     // Get characters
     func getCharacters() async throws -> CharacterResponse {
         return try await call(endpoint: API.getCharacters)
+    }
+    
+    // Get characters with filter options
+    func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse {
+        return try await call(endpoint: API.getCharactersWithFilterOptions(filterOptions: filterOptions))
     }
     
     //Get single character
@@ -50,6 +56,15 @@ struct MockCharacterWebRepository: CharacterWebRepository {
         return characterResponesMock
     }
     
+    func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse {
+        var characterResponesMock: CharacterResponse {
+            let mockInfo = ResponseInfo(count: 1, pages: 1, next: nil, prev: nil)
+            return CharacterResponse(info: mockInfo, results: [Mocks.mockCharacter])
+        }
+        
+        return characterResponesMock
+    }
+    
     func getSingleCharacter() async throws -> Character {
         return Mocks.mockCharacter
     }
@@ -58,6 +73,7 @@ struct MockCharacterWebRepository: CharacterWebRepository {
 extension RealCharacterWebRepository {
     enum API {
         case getCharacters
+        case getCharactersWithFilterOptions(filterOptions: FilterOptions)
         case getSingleCharacter(id: Int)
         case getMultipleCharacters(ids: [Int])
     }
@@ -68,6 +84,8 @@ extension RealCharacterWebRepository.API: APICall {
         switch self {
         case .getCharacters:
             return ""
+        case .getCharactersWithFilterOptions(let filterOptions):
+            return "?\(filterOptions.queryString)"
         case .getSingleCharacter(let id):
             return "/\(id)"
         case .getMultipleCharacters(let ids):
@@ -78,6 +96,8 @@ extension RealCharacterWebRepository.API: APICall {
     var method: HTTPMethod {
         switch self {
         case .getCharacters:
+            return .get
+        case .getCharactersWithFilterOptions:
             return .get
         case .getSingleCharacter:
             return .get
@@ -96,6 +116,8 @@ extension RealCharacterWebRepository.API: APICall {
     func body() throws -> Data? {
         switch self {
         case .getCharacters:
+            return nil
+        case .getCharactersWithFilterOptions:
             return nil
         case .getSingleCharacter:
             return nil
