@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 struct GridCell: View {
     let character: Character
     
@@ -16,21 +17,27 @@ struct GridCell: View {
                 if character.image.isEmpty {
                     Image("Placeholder")
                         .resizable()
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
                         .aspectRatio(contentMode: .fit)
+                        .frame(width: 54, height: 54)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 } else if let imageURL = URL(string: character.image) {
                     AsyncImage(url: imageURL) { image in
                         image.resizable()
                     } placeholder: {
                         Image("Placeholder")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 54, height: 54)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .aspectRatio(contentMode: .fit)
                 } else {
                     Image("Placeholder")
                         .resizable()
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
                         .aspectRatio(contentMode: .fit)
+                        .frame(width: 54, height: 54)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
         }

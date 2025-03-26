@@ -9,13 +9,39 @@ import SwiftUI
 
 struct ListCell: View {
     let location: Location
+    @State private var isExpanded: Bool = false
     
     var body: some View {
-        ZStack {
-            Text(location.name)
-                .font(.system(size: 20, weight: .bold))
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(location.name)
+                    .font(.headline)
+                
+                Spacer()
+                
+                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                    .foregroundColor(.black)
+            }
+            
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Type: \(location.type)")
+                    Text("Dimension: \(location.dimension)")
+                }
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
-        .ignoresSafeArea()
+        .padding()
+        .background(Color.white)
+        .cornerRadius(12)
+        .onTapGesture {
+            withAnimation {
+                isExpanded.toggle()
+            }
+        }
+        .padding(.top, 24)
     }
 }
 

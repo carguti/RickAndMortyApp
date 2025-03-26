@@ -49,12 +49,6 @@ struct LocationsView: View {
                     LazyVStack(alignment: .leading, spacing: 12) {
                         ForEach(filteredLocation) { location in
                             ListCell(location: location)
-                                .onTapGesture {
-                                    DispatchQueue.main.async {
-                                        self.selectedLocation = location
-                                        self.isSheetPresented = true
-                                    }
-                                }
                         }
                         Color.clear
                             .onAppear {
