@@ -39,6 +39,26 @@ final class CharactersVM: NSObject, ObservableObject {
         
     }
     
+    @MainActor
+    func fetchMoreCharacters() {
+        guard !isLoading, hasMoreResults else { return }
+        isLoading = true
+        
+        Task {
+            guard let characterResponse = characterResponse else { return }
+            
+            do {
+                guard let newResponse = try await charactersInteractor.getCharacters(nextPageURL: characterResponse.info.next) else { return }
+                self.characterResponse = newResponse
+                self.characters.append(contentsOf: newResponse.results)
+                isLoading = false
+            } catch {
+                print("Error loading more characters: \(error)")
+                isLoading = false
+            }
+        }
+    }
+    
     func filterCharacters(searchText: String) -> [Character] {
         return self.characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
@@ -54,5 +74,9 @@ final class CharactersVM: NSObject, ObservableObject {
                 print("Failed to fetch filtered characters: \(error)")
             }
         }
+    }
+    
+    var hasMoreResults: Bool {
+        characterResponse?.info.next != nil
     }
 }

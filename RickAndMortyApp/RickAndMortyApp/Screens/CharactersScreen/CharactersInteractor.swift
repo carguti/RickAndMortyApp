@@ -10,8 +10,14 @@ import Foundation
 class CharactersInteractor {
     @Inject var characterWebRepository: CharacterWebRepository
     
-    func getCharacters() async throws -> CharacterResponse? {
-        let charactersResponse = try await characterWebRepository.getCharacters()
+    func getCharacters(nextPageURL: String? = nil) async throws -> CharacterResponse? {
+        let charactersResponse: CharacterResponse
+        
+        if let nextPageURL = nextPageURL {
+            charactersResponse = try await characterWebRepository.getCharacters(nextPageURL: nextPageURL)
+        } else {
+            charactersResponse = try await characterWebRepository.getCharacters(nextPageURL: nil)
+        }
         
         return charactersResponse
     }
@@ -28,7 +34,7 @@ class MockCharactersInteractor: CharactersInteractor {
     var mockResponse: CharacterResponse?
     var shouldThrowError = false
     
-    override func getCharacters() async throws -> CharacterResponse? {
+    override func getCharacters(nextPageURL: String? = nil) async throws -> CharacterResponse? {
         if shouldThrowError {
             throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Mock error"])
         }

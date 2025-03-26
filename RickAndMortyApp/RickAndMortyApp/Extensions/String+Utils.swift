@@ -14,3 +14,15 @@ extension String {
         return self.ns.appendingPathComponent(path)
     }
 }
+
+extension String {
+    func extractPageNumber() -> Int? {
+        guard let url = URL(string: self),
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let pageItem = components.queryItems?.first(where: { $0.name == "page" }),
+              let pageNumber = Int(pageItem.value ?? "") else {
+            return nil
+        }
+        return pageNumber
+    }
+}

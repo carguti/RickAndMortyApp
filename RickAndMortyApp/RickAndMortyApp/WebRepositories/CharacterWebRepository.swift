@@ -8,12 +8,13 @@
 import Foundation
 
 protocol CharacterWebRepository: WebRepository {
-    func getCharacters() async throws -> CharacterResponse
-    func getSingleCharacter() async throws -> Character
+    func getCharacters(nextPageURL: String?) async throws -> CharacterResponse
+    func getSingleCharacter(characterId: Int) async throws -> Character
     func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse
 }
 
 struct RealCharacterWebRepository: CharacterWebRepository {
+    
     let session: URLSession
     let baseURL: String
     
@@ -23,8 +24,8 @@ struct RealCharacterWebRepository: CharacterWebRepository {
     }
     
     // Get characters
-    func getCharacters() async throws -> CharacterResponse {
-        return try await call(endpoint: API.getCharacters)
+    func getCharacters(nextPageURL: String? = nil) async throws -> CharacterResponse {
+        return try await call(endpoint: API.getCharacters(nextPageURL: nextPageURL))
     }
     
     // Get characters with filter options
@@ -33,21 +34,21 @@ struct RealCharacterWebRepository: CharacterWebRepository {
     }
     
     //Get single character
-    func getSingleCharacter() async throws -> Character {
-        return try await call(endpoint: API.getCharacters)
+    func getSingleCharacter(characterId: Int) async throws -> Character {
+        return try await call(endpoint: API.getSingleCharacter(id: characterId))
     }
     
     //Get multiple characters
-    func getMultipleCharacters() async throws -> [Character] {
-        return try await call(endpoint: API.getCharacters)
-    }
+    //func getMultipleCharacters() async throws -> [Character] {
+      //  return try await call(endpoint: API.getCharacters)
+    //}
 }
 
 struct MockCharacterWebRepository: CharacterWebRepository {
     let session: URLSession = .mockedResponsesOnly
     let baseURL = "https://test.com"
     
-    func getCharacters() async throws -> CharacterResponse {
+    func getCharacters(nextPageURL: String? = nil) async throws -> CharacterResponse {
         var characterResponesMock: CharacterResponse {
             let mockInfo = ResponseInfo(count: 1, pages: 1, next: nil, prev: nil)
             return CharacterResponse(info: mockInfo, results: [Mocks.mockCharacter])
@@ -65,14 +66,14 @@ struct MockCharacterWebRepository: CharacterWebRepository {
         return characterResponesMock
     }
     
-    func getSingleCharacter() async throws -> Character {
+    func getSingleCharacter(characterId: Int) async throws -> Character {
         return Mocks.mockCharacter
     }
 }
 
 extension RealCharacterWebRepository {
     enum API {
-        case getCharacters
+        case getCharacters(nextPageURL: String?)
         case getCharactersWithFilterOptions(filterOptions: FilterOptions)
         case getSingleCharacter(id: Int)
         case getMultipleCharacters(ids: [Int])
@@ -82,8 +83,12 @@ extension RealCharacterWebRepository {
 extension RealCharacterWebRepository.API: APICall {
     var path: String {
         switch self {
-        case .getCharacters:
-            return ""
+        case .getCharacters(var nextPage):
+            guard let nextPage = nextPage else {
+                return "?page=1"
+            }
+            
+            return "?page=\(nextPage.extractPageNumber() ?? 1)"
         case .getCharactersWithFilterOptions(let filterOptions):
             return "?\(filterOptions.queryString)"
         case .getSingleCharacter(let id):

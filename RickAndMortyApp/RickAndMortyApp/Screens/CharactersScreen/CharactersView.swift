@@ -65,7 +65,18 @@ struct CharactersView: View {
                                         self.isSheetPresented = true
                                     }
                                 }
+                            
+                            // Detect when the last item appears
+                            if charactersVM.hasMoreResults {
+                                ProgressView()
+                                    .onAppear {
+                                        charactersVM.fetchMoreCharacters()
+                                    }
+                            }
                         }
+                        
+                        Spacer()
+                            .frame(height: 30)
                     }
                     .animation(.easeInOut, value: gridSize)
                     .padding(.horizontal, 12)
