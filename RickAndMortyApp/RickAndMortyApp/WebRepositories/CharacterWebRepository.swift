@@ -10,7 +10,7 @@ import Foundation
 protocol CharacterWebRepository: WebRepository {
     func getCharacters(nextPageURL: String?) async throws -> CharacterResponse
     func getSingleCharacter(characterId: Int) async throws -> Character
-    func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse
+    func getCharactersWithFilterOptions(filterOptions: CharacterFilterOptions) async throws -> CharacterResponse
 }
 
 struct RealCharacterWebRepository: CharacterWebRepository {
@@ -29,7 +29,7 @@ struct RealCharacterWebRepository: CharacterWebRepository {
     }
     
     // Get characters with filter options
-    func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse {
+    func getCharactersWithFilterOptions(filterOptions: CharacterFilterOptions) async throws -> CharacterResponse {
         return try await call(endpoint: API.getCharactersWithFilterOptions(filterOptions: filterOptions))
     }
     
@@ -57,7 +57,7 @@ struct MockCharacterWebRepository: CharacterWebRepository {
         return characterResponesMock
     }
     
-    func getCharactersWithFilterOptions(filterOptions: FilterOptions) async throws -> CharacterResponse {
+    func getCharactersWithFilterOptions(filterOptions: CharacterFilterOptions) async throws -> CharacterResponse {
         var characterResponesMock: CharacterResponse {
             let mockInfo = ResponseInfo(count: 1, pages: 1, next: nil, prev: nil)
             return CharacterResponse(info: mockInfo, results: [Mocks.mockCharacter])
@@ -74,7 +74,7 @@ struct MockCharacterWebRepository: CharacterWebRepository {
 extension RealCharacterWebRepository {
     enum API {
         case getCharacters(nextPageURL: String?)
-        case getCharactersWithFilterOptions(filterOptions: FilterOptions)
+        case getCharactersWithFilterOptions(filterOptions: CharacterFilterOptions)
         case getSingleCharacter(id: Int)
         case getMultipleCharacters(ids: [Int])
     }

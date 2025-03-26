@@ -20,7 +20,7 @@ struct Character: Codable, Identifiable {
     let type: String
     let gender: String
     let origin: Origin
-    let location: Location
+    let location: CharacterLocation
     let image: String
     let episode: [String]
     let url: String
@@ -39,7 +39,7 @@ struct Character: Codable, Identifiable {
         type = try container.decode(String.self, forKey: .type)
         gender = try container.decode(String.self, forKey: .gender)
         origin = try container.decode(Origin.self, forKey: .origin)
-        location = try container.decode(Location.self, forKey: .location)
+        location = try container.decode(CharacterLocation.self, forKey: .location)
         image = try container.decode(String.self, forKey: .image)
         episode = try container.decode([String].self, forKey: .episode)
         url = try container.decode(String.self, forKey: .url)
@@ -76,7 +76,7 @@ struct Origin: Codable {
     var url: String
 }
 
-struct Location: Codable {
+struct CharacterLocation: Codable {
     var name: String
     var url: String
 }
@@ -90,7 +90,7 @@ extension Character {
         type: String,
         gender: String,
         origin: Origin,
-        location: Location,
+        location: CharacterLocation,
         image: String,
         episode: [String],
         url: String,

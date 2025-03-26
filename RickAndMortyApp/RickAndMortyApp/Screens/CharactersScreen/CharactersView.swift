@@ -9,7 +9,8 @@ import SwiftUI
 
 struct CharactersView: View {
     @StateObject var charactersVM = CharactersVM()
-    @State private var filterOptions = FilterOptions()
+    @State private var charactersFilterOptions = CharacterFilterOptions()
+    @State private var locationsFilterOptions = LocationsFilterOptions()
     @State private var isFilterPresented = false
     
     @State private var searchText: String = ""
@@ -65,15 +66,12 @@ struct CharactersView: View {
                                         self.isSheetPresented = true
                                     }
                                 }
-                            
-                            // Detect when the last item appears
-                            if charactersVM.hasMoreResults {
-                                ProgressView()
-                                    .onAppear {
-                                        charactersVM.fetchMoreCharacters()
-                                    }
-                            }
                         }
+                        
+                        Color.clear
+                            .onAppear {
+                                charactersVM.fetchMoreCharacters()
+                            }
                         
                         Spacer()
                             .frame(height: 30)
@@ -90,13 +88,9 @@ struct CharactersView: View {
                     .ignoresSafeArea()
                     .onTapGesture { isFilterPresented = false }
                 
-                FilterView(
-                    filterOptions: $filterOptions,
-                    isPresented: $isFilterPresented,
-                    applyFilter: {
-                        charactersVM.fetchFilteredCharacters(with: filterOptions)
-                    }
-                )
+                FilterView(characterFilterOptions: $charactersFilterOptions, locationsFilterOptions: $locationsFilterOptions, isPresented:  $isFilterPresented, applyFilter: {
+                    charactersVM.fetchFilteredCharacters(with: charactersFilterOptions)
+                }, filterViewType: .character)
                 .padding()
             }
         }

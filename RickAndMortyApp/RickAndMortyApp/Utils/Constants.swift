@@ -20,10 +20,22 @@ struct Mocks {
         type: "",
         gender: "Male",
         origin: Origin(name: "Earth", url: "https://rickandmortyapi.com/api/location/1"),
-        location: Location(name: "Earth", url: "https://rickandmortyapi.com/api/location/20"),
+        location: CharacterLocation(name: "Earth", url: "https://rickandmortyapi.com/api/location/20"),
         image: "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
         episode: ["https://rickandmortyapi.com/api/episode/1", "https://rickandmortyapi.com/api/episode/2"],
         url: "https://rickandmortyapi.com/api/character/1",
         created: Date()
     )
+    
+    static let mockLocation = Location(
+        id: 1,
+        name: "Earth",
+        type: "Planet",
+        dimension: "Dimension C-137",
+        residents: [
+            "https://rickandmortyapi.com/api/character/1",
+            "https://rickandmortyapi.com/api/character/2"
+          ],
+        url: "https://rickandmortyapi.com/api/location/1",
+        created: Date())
 }

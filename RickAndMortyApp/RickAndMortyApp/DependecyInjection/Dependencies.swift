@@ -40,6 +40,7 @@ class Dependencies {
     private init(testMode: Bool) {
         baseApiDependencies(testMode: testMode)
         getCharactersDependencies(testMode: testMode)
+        getLocationsDependencies(testMode: testMode)
     }
     
     static func create(testMode: Bool) -> Dependencies {
@@ -78,6 +79,30 @@ extension Dependencies {
                 }
                 
                 @Provider var baseApiWebRepository = RealCharacterWebRepository(session: session, baseUrl: charactersUrl) as CharacterWebRepository
+            }
+            
+            //@Provider var baseApiDDBBRepository = RealCharacterDBRepository() as BaseApiDBRepository
+        }
+    }
+}
+
+// MARK: - Characters dependencies
+
+extension Dependencies {
+    
+    private func getLocationsDependencies(testMode: Bool = false) {
+        @Inject var baseApiDBRepository: BaseApiDBRepository
+        
+        if testMode {
+            @Provider var baseApiWebRepository = MockLocationsWebRepository() as LocationsWebRepository
+            //@Provider var baseApiDDBBRepository = MockCharacterRepository() as BaseApiDBRepository
+        } else {
+            Task {
+                guard let locationsUrl = try baseApiDBRepository.getBaseApi()?.locations else {
+                    return
+                }
+                
+                @Provider var baseApiWebRepository = RealLocationsWebRepository(session: session, baseUrl: locationsUrl) as LocationsWebRepository
             }
             
             //@Provider var baseApiDDBBRepository = RealCharacterDBRepository() as BaseApiDBRepository
