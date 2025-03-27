@@ -20,6 +20,12 @@
 "STATUS"    = "Status";
 "GENDER"    = "Gender";
 
+/*********************/
+// MARK: - Characters
+/*********************/
+
+"CHARACTERS" = "Characters";
+"LOCATIONS" = "Locations";
 
 /*********************/
 // MARK: - Characters

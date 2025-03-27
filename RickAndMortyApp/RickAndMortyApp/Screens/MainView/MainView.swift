@@ -12,17 +12,12 @@ struct MainView: View {
         TabView {
             CharactersView()
                 .tabItem {
-                    Label("Characters", systemImage: "person")
+                    Label("CHARACTERS".localized, systemImage: "person")
                 }
             
             LocationsView()
                 .tabItem {
-                    Label("Locations", systemImage: "location")
-                }
-            
-            EpisodesView()
-                .tabItem {
-                    Label("Episodes", systemImage: "play.square.stack")
+                    Label("LOCATIONS".localized, systemImage: "location")
                 }
         }
         .accentColor(.black)
