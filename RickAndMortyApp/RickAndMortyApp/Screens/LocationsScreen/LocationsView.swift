@@ -65,7 +65,7 @@ struct LocationsView: View {
                             }
                         
                         Spacer()
-                            .frame(height: 30)
+                            .frame(height: 10)
                     }
                     .padding(.horizontal, 24)
                 }

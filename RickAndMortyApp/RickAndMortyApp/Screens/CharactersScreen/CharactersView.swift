@@ -80,7 +80,7 @@ struct CharactersView: View {
                             }
                         
                         Spacer()
-                            .frame(height: 30)
+                            .frame(height: 8)
                     }
                     .animation(.easeInOut, value: gridSize)
                     .padding(.horizontal, 12)

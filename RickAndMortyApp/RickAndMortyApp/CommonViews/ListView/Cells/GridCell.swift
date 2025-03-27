@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
+
 
 @MainActor
 struct GridCell: View {
@@ -14,31 +16,10 @@ struct GridCell: View {
     var body: some View {
         ZStack {
             VStack {
-                if character.image.isEmpty {
-                    Image("Placeholder")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 54, height: 54)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                } else if let imageURL = URL(string: character.image) {
-                    AsyncImage(url: imageURL) { image in
-                        image.resizable()
-                    } placeholder: {
-                        Image("Placeholder")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 54, height: 54)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                    }
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .aspectRatio(contentMode: .fit)
-                } else {
-                    Image("Placeholder")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 54, height: 54)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
+                WebImage(url: URL(string: character.image))
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .cornerRadius(12)
             }
         }
         .ignoresSafeArea()
