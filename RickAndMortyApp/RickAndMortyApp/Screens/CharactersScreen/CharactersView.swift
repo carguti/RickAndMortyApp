@@ -12,6 +12,7 @@ struct CharactersView: View {
     @State private var charactersFilterOptions = CharacterFilterOptions()
     @State private var locationsFilterOptions = LocationsFilterOptions()
     @State private var isFilterPresented = false
+    @State private var filteredResults = false
     
     @State private var searchText: String = ""
     @State private var gridSize: GridSize = .two
@@ -46,7 +47,10 @@ struct CharactersView: View {
                             .frame(width: 30)
                     }
                     
-                    Button(action: { isFilterPresented = true }) {
+                    Button(action: {
+                        isFilterPresented = true
+                        filteredResults = true
+                    }) {
                         Image(systemName: "line.horizontal.3.decrease.circle")
                             .imageScale(.large)
                             .foregroundColor(.black)
@@ -70,7 +74,9 @@ struct CharactersView: View {
                         
                         Color.clear
                             .onAppear {
-                                charactersVM.fetchMoreCharacters()
+                                if !filteredResults {
+                                    charactersVM.fetchMoreCharacters()
+                                }
                             }
                         
                         Spacer()
@@ -90,6 +96,11 @@ struct CharactersView: View {
                 
                 FilterView(characterFilterOptions: $charactersFilterOptions, locationsFilterOptions: $locationsFilterOptions, isPresented:  $isFilterPresented, applyFilter: {
                     charactersVM.fetchFilteredCharacters(with: charactersFilterOptions)
+                }, cancelFilter: {
+                    filteredResults = false
+                    Task {
+                        try await charactersVM.getCharacters()
+                    }
                 }, filterViewType: .character)
                 .padding()
             }
@@ -103,6 +114,7 @@ struct CharactersView: View {
             }
         }
         .onAppear {
+            filteredResults = false
             Task {
                 try await charactersVM.getCharacters()
             }

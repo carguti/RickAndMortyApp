@@ -17,6 +17,7 @@ struct FilterView: View {
     @Binding var locationsFilterOptions: LocationsFilterOptions
     @Binding var isPresented: Bool
     var applyFilter: () -> Void
+    var cancelFilter: () -> Void
     var filterViewType: FilterViewType
     
     var body: some View {
@@ -135,6 +136,7 @@ extension FilterView {
             )
             
             Button("CANCEL".localized) {
+                cancelFilter()
                 isPresented = false
             }
             .foregroundColor(.black)
@@ -159,7 +161,7 @@ extension FilterView {
         characterFilterOptions: .constant(CharacterFilterOptions()),
         locationsFilterOptions: .constant(LocationsFilterOptions()),
         isPresented: .constant(true),
-        applyFilter: {},
+        applyFilter: {}, cancelFilter: {},
         filterViewType: .character
     )
 }

@@ -13,6 +13,7 @@ struct LocationsView: View {
     @State private var charactersFilterOptions = CharacterFilterOptions()
     @State private var locationsFilterOptions = LocationsFilterOptions()
     @State private var isFilterPresented = false
+    @State private var filteredResults = false
     
     @State private var searchText: String = ""
     @State private var selectedLocation: Location?
@@ -37,7 +38,11 @@ struct LocationsView: View {
                     
                     Spacer()
                     
-                    Button(action: { isFilterPresented = true }) {
+                    Button(action: {
+                        isFilterPresented = true
+                        filteredResults = true
+                        
+                    }) {
                         Image(systemName: "line.horizontal.3.decrease.circle")
                             .imageScale(.large)
                             .foregroundColor(.black)
@@ -54,7 +59,9 @@ struct LocationsView: View {
                         }
                         Color.clear
                             .onAppear {
-                                locationsVM.fetchMoreLocations()
+                                if !filteredResults {
+                                    locationsVM.fetchMoreLocations()
+                                }
                             }
                         
                         Spacer()
@@ -73,11 +80,17 @@ struct LocationsView: View {
                 
                 FilterView(characterFilterOptions: $charactersFilterOptions, locationsFilterOptions: $locationsFilterOptions, isPresented:  $isFilterPresented, applyFilter: {
                     locationsVM.fetchFilteredLocations(with: locationsFilterOptions)
+                }, cancelFilter: {
+                    filteredResults = false
+                    Task {
+                        try await locationsVM.getLocations()
+                    }
                 }, filterViewType: .location)
                 .padding()
             }
         }
         .onAppear {
+            filteredResults = false
             Task {
                 try await locationsVM.getLocations()
             }
