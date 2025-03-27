@@ -32,10 +32,8 @@ final class CharactersVM: NSObject, ObservableObject {
         isLoading = true
         defer { isLoading = false }
         
-        Task {
-            self.characterResponse = try await charactersInteractor.getCharacters()
-            self.characters = characterResponse?.results ?? []
-        }
+        self.characterResponse = try await charactersInteractor.getCharacters()
+        self.characters = characterResponse?.results ?? []
         
     }
     

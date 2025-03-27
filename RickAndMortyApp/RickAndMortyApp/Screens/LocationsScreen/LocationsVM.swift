@@ -32,10 +32,8 @@ final class LocationsVM: NSObject, ObservableObject {
         isLoading = true
         defer { isLoading = false }
         
-        Task {
-            self.locationResponse = try await locationsInteractor.getLocations()
-            self.locations = locationResponse?.results ?? []
-        }
+        self.locationResponse = try await locationsInteractor.getLocations()
+        self.locations = locationResponse?.results ?? []
         
     }
     

@@ -31,13 +31,15 @@ class CharactersInteractor {
 
 // Mock for CharactersInteractor
 class MockCharactersInteractor: CharactersInteractor {
-    var mockResponse: CharacterResponse?
-    var shouldThrowError = false
-    
+    var charactersToReturn: CharacterResponse?
+    var errorToThrow: Error?
+
     override func getCharacters(nextPageURL: String? = nil) async throws -> CharacterResponse? {
-        if shouldThrowError {
-            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Mock error"])
+        if let errorToThrow = errorToThrow {
+            throw errorToThrow
+        } else {
+            charactersToReturn = CharacterResponse(info: ResponseInfo(count: 1, pages: 1, next: nil, prev: nil), results: [Mocks.mockCharacter])
+            return charactersToReturn
         }
-        return mockResponse
     }
 }

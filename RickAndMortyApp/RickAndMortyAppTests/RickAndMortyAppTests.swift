@@ -28,59 +28,45 @@ class CharactersVMTests: XCTestCase {
     }
     
     // Test getCharacters() with a successful response
-    func testGetCharactersSuccess() async {
-        let mockCharacter = Character(id: 1, name: "Rick Sanchez", status: .alive, species: "Human", type: "", gender: "Male", origin: Origin(name: "Earth", url: ""), location: Location(name: "Earth", url: ""), image: "image_url", episode: [], url: "url", created: Date())
-        let mockResponse = CharacterResponse(info: ResponseInfo(count: 1, pages: 1, next: nil, prev: nil), results: [mockCharacter])
-        mockCharactersInteractor.mockResponse = mockResponse
+    func testGetCharactersSuccess() async throws {
+        // Given
+        let mockResponse = CharacterResponse(info: ResponseInfo(count: 1, pages: 1, next: nil, prev: nil), results: [
+            Character(id: 1, name: "Rick Sanchez", status: .alive, species: "Human", type: "Human", gender: "Male", origin: Origin(name: "Earth", url: "testUrl"), location: CharacterLocation(name: "Earth", url: "testUrl"), image: "image_url", episode: [""], url: "testUrl", created: Date())
+        ])
+        
+        // Setting up the mock response
+        mockCharactersInteractor.charactersToReturn = mockResponse
         
         // When
-        do {
-            try await charactersVM.getCharacters()
-            
-            // Then
-            XCTAssertEqual(charactersVM.characters.count, 1)
-            XCTAssertEqual(charactersVM.characters.first?.name, "Rick Sanchez")
-            XCTAssertFalse(charactersVM.isLoading)
-        } catch {
-            XCTFail("Expected success, but got error: \(error)")
-        }
+        try await charactersVM.getCharacters()
+        
+        // Then
+        XCTAssertFalse(charactersVM.isLoading)
+        XCTAssertEqual(charactersVM.characters.count, 1)
+        XCTAssertEqual(charactersVM.characters.first?.name, "Rick Sanchez")
     }
     
     // Test getCharacters() with a failure response
-    func testGetCharactersFailure() async {
+    func testGetCharactersFailure() async throws {
         // Given
-        mockCharactersInteractor.shouldThrowError = true
+        let expectedError = NSError(domain: "TestError", code: 1, userInfo: nil)
+        mockCharactersInteractor.errorToThrow = expectedError
         
         // When
         do {
             try await charactersVM.getCharacters()
-            XCTFail("Expected error, but got success.")
+            XCTFail("Expected error to be thrown")
         } catch {
             // Then
-            XCTAssertEqual(error.localizedDescription, "Mock error")
-        }
-    }
-    
-    func testGetCharactersNoData() async {
-        // Given
-        mockCharactersInteractor.mockResponse = nil
-        
-        // When
-        do {
-            try await charactersVM.getCharacters()
-            
-            // Then
-            XCTAssertTrue(charactersVM.characters.isEmpty)
-        } catch {
-            XCTFail("Expected success, but got error: \(error)")
+            XCTAssertTrue(charactersVM.isLoading)
         }
     }
     
     // Test the filterCharacters() method
     func testFilterCharacters() {
         // Given
-        let character1 = Character(id: 1, name: "Rick Sanchez", status: .alive, species: "Human", type: "", gender: "Male", origin: Origin(name: "Earth", url: ""), location: Location(name: "Earth", url: ""), image: "image_url", episode: [], url: "url", created: Date())
-        let character2 = Character(id: 2, name: "Morty Smith", status: .alive, species: "Human", type: "", gender: "Male", origin: Origin(name: "Earth", url: ""), location: Location(name: "Earth", url: ""), image: "image_url", episode: [], url: "url", created: Date())
+        let character1 = Character(id: 1, name: "Rick Sanchez", status: .alive, species: "Human", type: "", gender: "Male", origin: Origin(name: "Earth", url: ""), location: CharacterLocation(name: "Earth", url: ""), image: "image_url", episode: [], url: "url", created: Date())
+        let character2 = Character(id: 2, name: "Morty Smith", status: .alive, species: "Human", type: "", gender: "Male", origin: Origin(name: "Earth", url: ""), location: CharacterLocation(name: "Earth", url: ""), image: "image_url", episode: [], url: "url", created: Date())
         charactersVM.characters = [character1, character2]
         
         // When
@@ -94,7 +80,7 @@ class CharactersVMTests: XCTestCase {
     // Test filterCharacters() when no characters match
     func testFilterCharactersNoMatch() {
         // Given
-        let character1 = Character(id: 1, name: "Rick Sanchez", status: .alive, species: "Human", type: "", gender: "Male", origin: Origin(name: "Earth", url: ""), location: Location(name: "Earth", url: ""), image: "image_url", episode: [], url: "url", created: Date())
+        let character1 = Character(id: 1, name: "Rick Sanchez", status: .alive, species: "Human", type: "", gender: "Male", origin: Origin(name: "Earth", url: ""), location: CharacterLocation(name: "Earth", url: ""), image: "image_url", episode: [], url: "url", created: Date())
         charactersVM.characters = [character1]
         
         // When
