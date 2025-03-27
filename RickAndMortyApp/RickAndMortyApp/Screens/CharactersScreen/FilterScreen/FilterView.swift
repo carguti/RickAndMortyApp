@@ -21,7 +21,7 @@ struct FilterView: View {
     
     var body: some View {
         VStack(spacing: 40) {
-            Text(filterViewType == .character ? "Filter Characters" : "Filter Locations")
+            Text(filterViewType == .character ? "FILTER_CHARACTERS".localized : "FILTER_LOCATIONS".localized)
                 .font(.title)
                 .bold()
 
@@ -45,18 +45,29 @@ struct FilterView: View {
 extension FilterView {
     @ViewBuilder
     var characterFilterView: some View {
-        FloatingPlaceholderTextField(text: $characterFilterOptions.name, placeholder: "Name", isSearcheable: false)
+        FloatingPlaceholderTextField(text: $characterFilterOptions.name, placeholder: "NAME".localized, isSearcheable: false)
             .frame(height: 40)
 
-        statusPicker(selection: $characterFilterOptions.status)
-
-        FloatingPlaceholderTextField(text: $characterFilterOptions.species, placeholder: "Species", isSearcheable: false)
+        HStack {
+            Text("STATUS".localized)
+            
+            statusPicker(selection: $characterFilterOptions.status)
+        }
+        .padding()
+        
+        FloatingPlaceholderTextField(text: $characterFilterOptions.species, placeholder: "CHARACTERS_SPECIES".localized, isSearcheable: false)
             .frame(height: 40)
 
-        FloatingPlaceholderTextField(text: $characterFilterOptions.type, placeholder: "Type", isSearcheable: false)
+        FloatingPlaceholderTextField(text: $characterFilterOptions.type, placeholder: "TYPE".localized, isSearcheable: false)
             .frame(height: 40)
 
-        genderPicker(selection: $characterFilterOptions.gender)
+        HStack {
+            Text("GENDER".localized)
+            
+            genderPicker(selection: $characterFilterOptions.gender)
+        }
+        .padding()
+        
     }
 }
 
@@ -64,13 +75,13 @@ extension FilterView {
 extension FilterView {
     @ViewBuilder
     var locationFilterView: some View {
-        FloatingPlaceholderTextField(text: $locationsFilterOptions.name, placeholder: "Name", isSearcheable: false)
+        FloatingPlaceholderTextField(text: $locationsFilterOptions.name, placeholder: "NAME".localized, isSearcheable: false)
             .frame(height: 40)
 
-        FloatingPlaceholderTextField(text: $locationsFilterOptions.type, placeholder: "Type", isSearcheable: false)
+        FloatingPlaceholderTextField(text: $locationsFilterOptions.type, placeholder: "TYPE".localized, isSearcheable: false)
             .frame(height: 40)
 
-        FloatingPlaceholderTextField(text: $locationsFilterOptions.dimension, placeholder: "Dimension", isSearcheable: false)
+        FloatingPlaceholderTextField(text: $locationsFilterOptions.dimension, placeholder: "LOCATIONS_DIMENSION".localized, isSearcheable: false)
             .frame(height: 40)
     }
 }
@@ -80,10 +91,10 @@ extension FilterView {
     @ViewBuilder
     func statusPicker(selection: Binding<String>) -> some View {
         Picker(selection: selection, label: Text(selection.wrappedValue.isEmpty ? "Select Status" : selection.wrappedValue)) {
-            Text("All").tag("")
-            Text("Alive").tag("alive")
-            Text("Dead").tag("dead")
-            Text("Unknown").tag("unknown")
+            Text("ALL".localized).tag("")
+            Text("CHARACTERS_ALIVE".localized).tag("alive")
+            Text("CHARACTERS_DEAD".localized).tag("dead")
+            Text("UNKNOWN".localized).tag("unknown")
         }
         .pickerStyle(MenuPickerStyle())
         .frame(maxWidth: .infinity)
@@ -92,11 +103,11 @@ extension FilterView {
     @ViewBuilder
     func genderPicker(selection: Binding<String>) -> some View {
         Picker(selection: selection, label: Text(selection.wrappedValue.isEmpty ? "Select Gender" : selection.wrappedValue)) {
-            Text("All").tag("")
-            Text("Female").tag("female")
-            Text("Male").tag("male")
-            Text("Genderless").tag("genderless")
-            Text("Unknown").tag("unknown")
+            Text("ALL".localized).tag("")
+            Text("CHARACTER_FEMALE".localized).tag("female")
+            Text("CHARACTER_MALE".localized).tag("male")
+            Text("CHARACTER_GENDERLESS".localized).tag("genderless")
+            Text("UNKNOWN".localized).tag("unknown")
         }
         .pickerStyle(MenuPickerStyle())
         .frame(maxWidth: .infinity)
@@ -109,7 +120,7 @@ extension FilterView {
         HStack(spacing: 24) {
             Spacer()
 
-            Button("Apply") {
+            Button("APPLY".localized) {
                 applyFilter()
                 isPresented = false
             }
@@ -123,7 +134,7 @@ extension FilterView {
                     .stroke(Color.white, lineWidth: 1)
             )
             
-            Button("Cancel") {
+            Button("CANCEL".localized) {
                 isPresented = false
             }
             .foregroundColor(.black)

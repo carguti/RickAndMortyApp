@@ -30,15 +30,15 @@ struct ListCell: View {
             
             if isExpanded {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Type: ")
+                    Text("TYPE".localized + ": ")
                         .foregroundColor(Color.black.opacity(0.7))
                     + Text(location.type)
                         .foregroundColor(.gray)
-                    Text("Dimension: ")
+                    Text("LOCATIONS_DIMENSION".localized + ": ")
                         .foregroundColor(Color.black.opacity(0.7))
                     + Text(location.dimension)
                         .foregroundColor(.gray)
-                    Text("Residents in \(location.name)")
+                    Text("LOCATIONS_RESIDENTS_IN".localized + "\(location.name)")
                         .foregroundColor(Color.black.opacity(0.7))
                     
                     Text(locationsDetailVM.namesString)

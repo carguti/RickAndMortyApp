@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  RickAndMortyApp
+
+  Created by Carlos Gutiérrez Casado on 27/3/25.
+  
+*/
+
+/*********************/
+// MARK: - Common
+/*********************/
+
+"APPLY"     = "Apply";
+"CANCEL"    = "Cancel";
+"SEARCHING" = "Searching...";
+"NAME"      = "Name";
+"TYPE"      = "Type";
+"ALL"       = "All";
+"UNKNOWN"   = "Unknown";
+"STATUS"    = "Status";
+"GENDER"    = "Gender";
+
+
+/*********************/
+// MARK: - Characters
+/*********************/
+
+"CHARACTERS" = "Characters";
+"SEARCH_CHARACTERS" = "Search characters";
+"FILTER_CHARACTERS" = "Filter Characters";
+
+"CHARACTERS_SPECIES" = "Species";
+"CHARACTERS_ALIVE" = "Alive";
+"CHARACTERS_DEAD" = "Dead";
+
+"CHARACTER_MALE" = "Male";
+"CHARACTER_FEMALE" = "Female";
+"CHARACTER_GENDERLESS" = "Genderless";
+
+/*********************/
+// MARK: - Locations
+/*********************/
+
+"LOCATIONS" = "Locations";
+"SEARCH_LOCATIONS" = "Search locations";
+"FILTER_LOCATIONS" = "Filter Locations";
+
+"LOCATIONS_DIMENSION" = "Dimension";
+"LOCATIONS_RESIDENTS_IN" = "Residents in ";

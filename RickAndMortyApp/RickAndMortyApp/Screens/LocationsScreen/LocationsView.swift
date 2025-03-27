@@ -33,7 +33,7 @@ struct LocationsView: View {
         ZStack {
             VStack {
                 HStack {
-                    FloatingPlaceholderTextField(text: $searchText, placeholder: "Search location", isSearcheable: true)
+                    FloatingPlaceholderTextField(text: $searchText, placeholder: "SEARCH_LOCATIONS".localized, isSearcheable: true)
                     
                     Spacer()
                     

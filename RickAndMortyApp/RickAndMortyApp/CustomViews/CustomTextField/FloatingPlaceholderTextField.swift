@@ -17,7 +17,7 @@ struct FloatingPlaceholderTextField: View {
     var body: some View {
         VStack(spacing: -2) {
             ZStack(alignment: .leading) {
-                Text(!isFocused ? placeholder : (isSearcheable ? "Searching..." : placeholder))
+                Text(!isFocused ? placeholder : (isSearcheable ? "SEARCHING".localized : placeholder))
                     .foregroundColor(isFocused || !text.isEmpty ? Color.black : Color.black.opacity(0.2))
                     .font(isFocused || !text.isEmpty ? (.system(size: 16, weight: .regular)) : (.system(size: 20, weight: .regular)))
                     .offset(y: isFocused || !text.isEmpty ? -40 : 0)

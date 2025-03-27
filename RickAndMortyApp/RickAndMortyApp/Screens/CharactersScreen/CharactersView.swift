@@ -31,7 +31,7 @@ struct CharactersView: View {
         ZStack {
             VStack {
                 HStack {
-                    FloatingPlaceholderTextField(text: $searchText, placeholder: "Search character", isSearcheable: true)
+                    FloatingPlaceholderTextField(text: $searchText, placeholder: "SEARCH_CHARACTERS".localized, isSearcheable: true)
                     
                     Spacer()
                     
