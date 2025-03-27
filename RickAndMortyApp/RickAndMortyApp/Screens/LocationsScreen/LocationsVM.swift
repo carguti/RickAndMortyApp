@@ -63,13 +63,14 @@ final class LocationsVM: NSObject, ObservableObject {
         return self.locations.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
     
+    @MainActor
     func fetchFilteredLocations(with filterOptions: LocationsFilterOptions) {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
+            
             do {
                 let response = try await locationsInteractor.getLocationsWithFilterOptions(filterOptions: filterOptions)
-                DispatchQueue.main.async {
-                    self.locations = response?.results ?? []
-                }
+                self.locations = response?.results ?? []
             } catch {
                 print("Failed to fetch filtered locations: \(error)")
             }

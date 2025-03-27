@@ -26,3 +26,14 @@ extension String {
         return pageNumber
     }
 }
+
+extension String {
+    func extractCharacterNumber() -> Int? {
+        let components = self.split(separator: "/")
+        if let lastComponent = components.last, let number = Int(lastComponent) {
+            return number
+        }
+        return nil
+    }
+}
+

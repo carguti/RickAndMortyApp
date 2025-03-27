@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct LocationDetailView: View {
+    @StateObject var locationsDetailVM = LocationDetailVM()
+    
     let location: Location
+    
+    var charactersNames: [String] = []
+    var charactersResidents: [Character] = []
     
     var body: some View {
         ZStack {
@@ -27,6 +32,14 @@ struct LocationDetailView: View {
                             Text("Dimension: \(location.dimension)".capitalized)
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.black)
+                            
+                            HStack {
+                                Text("Residents: \(location.dimension)".capitalized)
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundStyle(Color.black)
+                                
+                                Text(locationsDetailVM.namesString)
+                            }
                         }
                     }
                 }
@@ -34,7 +47,13 @@ struct LocationDetailView: View {
         }
         .ignoresSafeArea()
         .padding(.horizontal, 20)
+        .onAppear {
+            Task {
+                try await locationsDetailVM.getCharacters(from: location)
+            }
+        }
     }
+    
 }
 
 #Preview {

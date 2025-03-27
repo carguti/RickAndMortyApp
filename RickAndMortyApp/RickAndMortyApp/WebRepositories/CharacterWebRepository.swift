@@ -11,6 +11,7 @@ protocol CharacterWebRepository: WebRepository {
     func getCharacters(nextPageURL: String?) async throws -> CharacterResponse
     func getSingleCharacter(characterId: Int) async throws -> Character
     func getCharactersWithFilterOptions(filterOptions: CharacterFilterOptions) async throws -> CharacterResponse
+    func getMultipleCharacters(charactersIds: [Int]) async throws -> [Character]
 }
 
 struct RealCharacterWebRepository: CharacterWebRepository {
@@ -39,9 +40,9 @@ struct RealCharacterWebRepository: CharacterWebRepository {
     }
     
     //Get multiple characters
-    //func getMultipleCharacters() async throws -> [Character] {
-      //  return try await call(endpoint: API.getCharacters)
-    //}
+    func getMultipleCharacters(charactersIds: [Int]) async throws -> [Character] {
+        return try await call(endpoint: API.getMultipleCharacters(ids: charactersIds))
+    }
 }
 
 struct MockCharacterWebRepository: CharacterWebRepository {
@@ -69,6 +70,10 @@ struct MockCharacterWebRepository: CharacterWebRepository {
     func getSingleCharacter(characterId: Int) async throws -> Character {
         return Mocks.mockCharacter
     }
+    
+    func getMultipleCharacters(charactersIds: [Int]) async throws -> [Character] {
+        return [Mocks.mockCharacter]
+    }
 }
 
 extension RealCharacterWebRepository {
@@ -83,7 +88,7 @@ extension RealCharacterWebRepository {
 extension RealCharacterWebRepository.API: APICall {
     var path: String {
         switch self {
-        case .getCharacters(var nextPage):
+        case .getCharacters(let nextPage):
             guard let nextPage = nextPage else {
                 return "?page=1"
             }
@@ -93,8 +98,8 @@ extension RealCharacterWebRepository.API: APICall {
             return "?\(filterOptions.queryString)"
         case .getSingleCharacter(let id):
             return "/\(id)"
-        case .getMultipleCharacters(let ids):
-            return "/\(ids)"
+        case .getMultipleCharacters(let charactersIds):
+            return "/\(charactersIds)"
         }
     }
         

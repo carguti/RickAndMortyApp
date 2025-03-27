@@ -9,7 +9,12 @@ import SwiftUI
 
 struct ListCell: View {
     let location: Location
-    @State private var isExpanded: Bool = false
+    @StateObject var locationsDetailVM = LocationDetailVM()
+    @Binding var expandedLocationId: Int?
+    
+    var isExpanded: Bool {
+        expandedLocationId == location.id
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -25,8 +30,20 @@ struct ListCell: View {
             
             if isExpanded {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Type: \(location.type)")
-                    Text("Dimension: \(location.dimension)")
+                    Text("Type: ")
+                        .foregroundColor(Color.black.opacity(0.7))
+                    + Text(location.type)
+                        .foregroundColor(.gray)
+                    Text("Dimension: ")
+                        .foregroundColor(Color.black.opacity(0.7))
+                    + Text(location.dimension)
+                        .foregroundColor(.gray)
+                    Text("Residents in \(location.name)")
+                        .foregroundColor(Color.black.opacity(0.7))
+                    
+                    Text(locationsDetailVM.namesString)
+                        .padding(.leading, 12)
+                        .foregroundColor(.gray)
                 }
                 .font(.subheadline)
                 .foregroundColor(.secondary)
@@ -38,13 +55,19 @@ struct ListCell: View {
         .cornerRadius(12)
         .onTapGesture {
             withAnimation {
-                isExpanded.toggle()
+                if isExpanded {
+                    expandedLocationId = nil
+                } else {
+                    expandedLocationId = location.id
+                    Task {
+                        try await locationsDetailVM.getCharacters(from: location)
+                    }
+                }
             }
         }
-        .padding(.top, 24)
     }
 }
 
 #Preview {
-    ListCell(location: Mocks.mockLocation)
+    ListCell(location: Mocks.mockLocation, expandedLocationId: .constant(1))
 }

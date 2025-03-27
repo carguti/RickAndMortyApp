@@ -19,6 +19,8 @@ struct LocationsView: View {
     @State private var isSheetPresented = false
     var currentPage: Int = 1
     
+    @State private var expandedLocationId: Int?
+    
     var filteredLocation: [Location] {
         if searchText.isEmpty {
             return locationsVM.locations
@@ -48,7 +50,7 @@ struct LocationsView: View {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 12) {
                         ForEach(filteredLocation) { location in
-                            ListCell(location: location)
+                            ListCell(location: location, expandedLocationId: $expandedLocationId)
                         }
                         Color.clear
                             .onAppear {
@@ -73,14 +75,6 @@ struct LocationsView: View {
                     locationsVM.fetchFilteredLocations(with: locationsFilterOptions)
                 }, filterViewType: .location)
                 .padding()
-            }
-        }
-        .sheet(isPresented: Binding(
-            get: { isSheetPresented && selectedLocation != nil },
-            set: { isSheetPresented = $0 }
-        )) {
-            if let location = selectedLocation {
-                LocationDetailView(location: location)
             }
         }
         .onAppear {

@@ -63,13 +63,14 @@ final class CharactersVM: NSObject, ObservableObject {
         return self.characters.filter { $0.name.lowercased().contains(searchText.lowercased()) }
     }
     
+    @MainActor
     func fetchFilteredCharacters(with filterOptions: CharacterFilterOptions) {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
+            
             do {
                 let response = try await charactersInteractor.getCharactersWithFilterOptions(filterOptions: filterOptions)
-                DispatchQueue.main.async {
-                    self.characters = response?.results ?? []
-                }
+                self.characters = response?.results ?? []
             } catch {
                 print("Failed to fetch filtered characters: \(error)")
             }

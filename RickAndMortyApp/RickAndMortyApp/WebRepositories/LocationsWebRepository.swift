@@ -76,7 +76,7 @@ extension RealLocationsWebRepository {
 extension RealLocationsWebRepository.API: APICall {
     var path: String {
         switch self {
-        case .getLocations(var nextPage):
+        case .getLocations(let nextPage):
             guard let nextPage = nextPage else {
                 return "?page=1"
             }
