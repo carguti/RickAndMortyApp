@@ -26,8 +26,8 @@ struct CharacterDetailView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 20))
                     .aspectRatio(contentMode: .fit)
                     
-                    VStack(alignment: .leading, spacing: 20) {
-                        VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .center, spacing: 20) {
+                        VStack(alignment: .center, spacing: 8) {
                             Text("Species: \(character.species)".capitalized)
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.black)
@@ -37,8 +37,8 @@ struct CharacterDetailView: View {
                                 .foregroundStyle(Color.black)
                         }
                         
-                        VStack(alignment: .leading) {
-                            Text("Last known location:")
+                        VStack(alignment: .center) {
+                            Text("Last known location: ")
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(Color.black.opacity(0.5))
                             
@@ -47,12 +47,12 @@ struct CharacterDetailView: View {
                                 .foregroundStyle(Color.black)
                         }
                         
-                        VStack(alignment: .leading) {
-                            Text("First seen in:")
+                        VStack(alignment: .center) {
+                            Text("Has been seen in the episodes: ")
                                 .font(.system(size: 14, weight: .regular))
                                 .foregroundStyle(Color.black.opacity(0.5))
                             
-                            Text("\(character.episode.first ?? "Maybe an upcoming character?")".capitalized)
+                            Text("\(character.episode.episodeNumbersString())")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(Color.black)
                         }

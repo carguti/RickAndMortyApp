@@ -21,7 +21,7 @@ struct RealCharacterWebRepository: CharacterWebRepository {
     
     init(session: URLSession, baseUrl: String) {
         self.session = session
-        self.baseURL = baseUrl
+        self.baseURL =  UserDefaults.standard.baseApi?.characters ?? ""
     }
     
     // Get characters

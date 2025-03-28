@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct ApplicationSwitcher: View {
+    @MainActor
     var body: some View {
-        if (!UserDefaults.standard.onBoardingShown) {
+        if (UserDefaults.standard.baseApi == nil) {
              OnBoardingView()
         } else {
              MainView()

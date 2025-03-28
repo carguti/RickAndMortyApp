@@ -37,3 +37,10 @@ extension String {
     }
 }
 
+extension String {
+    func episodeNumber() -> String? {
+        return self.components(separatedBy: "/").last
+    }
+}
+
+

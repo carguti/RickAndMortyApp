@@ -20,7 +20,15 @@ struct DependencyInjector {
     
     // Creates a "key:value" in a dictionary with the description of T being the key, and T being the actual value.
     static func register<T>(dependency: T) {
-        dependencyList[String(describing: T.self)] = dependency
+        let key = String(describing: T.self)
+        
+        // Remove existing dependency if it exists
+        if dependencyList.keys.contains(key) {
+            dependencyList.removeValue(forKey: key)
+        }
+        
+        // Store the dependency as AnyObject
+        dependencyList[key] = dependency
     }
 }
 

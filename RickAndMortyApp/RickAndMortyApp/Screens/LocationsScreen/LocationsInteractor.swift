@@ -7,10 +7,15 @@
 
 import Foundation
 
+
 class LocationsInteractor {
     @Inject var locationsrWebRepository: LocationsWebRepository
     
+    @MainActor
     func getLocations(nextPageURL: String? = nil) async throws -> LocationResponse? {
+        let dependencies = Dependencies.create(testMode: false)
+        dependencies.initializeCharactersDependencies(testMode: false)
+        
         let locationResponse: LocationResponse
         
         if let nextPageURL = nextPageURL {
@@ -22,6 +27,7 @@ class LocationsInteractor {
         return locationResponse
     }
     
+    @MainActor
     func getLocationsWithFilterOptions(filterOptions: LocationsFilterOptions) async throws -> LocationResponse? {
         let locationResponse = try await locationsrWebRepository.getLocationsWithFilterOptions(filterOptions: filterOptions)
         

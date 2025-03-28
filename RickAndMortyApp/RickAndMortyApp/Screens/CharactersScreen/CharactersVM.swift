@@ -9,7 +9,7 @@ import Foundation
 
 final class CharactersVM: NSObject, ObservableObject {
     
-    private var charactersInteractor = CharactersInteractor()
+    private var charactersInteractor: CharactersInteractor
     
     var characterResponse: CharacterResponse?
     @Published var characters: [Character] = []

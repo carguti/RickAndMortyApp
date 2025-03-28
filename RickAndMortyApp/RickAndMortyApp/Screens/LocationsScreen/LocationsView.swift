@@ -30,6 +30,11 @@ struct LocationsView: View {
         }
     }
     
+    init() {
+        let dependencies = Dependencies.create(testMode: false)
+        dependencies.initializeLocationsDependencies(testMode: false)
+    }
+    
     var body: some View {
         ZStack {
             VStack {

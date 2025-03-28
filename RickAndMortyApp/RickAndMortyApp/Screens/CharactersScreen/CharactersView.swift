@@ -28,6 +28,11 @@ struct CharactersView: View {
         }
     }
     
+    init() {
+        let dependencies = Dependencies.create(testMode: false)
+        dependencies.initializeCharactersDependencies(testMode: false)
+    }
+    
     var body: some View {
         ZStack {
             VStack {

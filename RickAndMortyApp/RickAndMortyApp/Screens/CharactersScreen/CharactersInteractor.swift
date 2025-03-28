@@ -7,10 +7,15 @@
 
 import Foundation
 
+
 class CharactersInteractor {
     @Inject var characterWebRepository: CharacterWebRepository
     
+    @MainActor
     func getCharacters(nextPageURL: String? = nil) async throws -> CharacterResponse? {
+        let dependencies = Dependencies.create(testMode: false)
+        dependencies.initializeCharactersDependencies(testMode: false)
+        
         let charactersResponse: CharacterResponse
         
         if let nextPageURL = nextPageURL {
@@ -22,6 +27,7 @@ class CharactersInteractor {
         return charactersResponse
     }
     
+    @MainActor
     func getCharactersWithFilterOptions(filterOptions: CharacterFilterOptions) async throws -> CharacterResponse? {
         let charactersResponse = try await characterWebRepository.getCharactersWithFilterOptions(filterOptions: filterOptions)
         

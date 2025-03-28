@@ -38,13 +38,27 @@ class Dependencies {
     }
     
     private init(testMode: Bool) {
-        baseApiDependencies(testMode: testMode)
-        getCharactersDependencies(testMode: testMode)
-        getLocationsDependencies(testMode: testMode)
+        initializeBaseApiDependencies(testMode: testMode)
     }
+        
     
     static func create(testMode: Bool) -> Dependencies {
         return Dependencies(testMode: testMode)
+    }
+    
+    // MARK: - Base API Dependencies
+    private func initializeBaseApiDependencies(testMode: Bool) {
+        baseApiDependencies(testMode: testMode)
+    }
+    
+    // MARK: - Feature-Specific Dependencies
+    func initializeCharactersDependencies(testMode: Bool) {
+        getCharactersDependencies(testMode: testMode)
+    }
+    
+    // MARK: - Feature-Specific Dependencies
+    func initializeLocationsDependencies(testMode: Bool) {
+        getLocationsDependencies(testMode: testMode)
     }
 }
 
@@ -70,15 +84,13 @@ extension Dependencies {
         @Inject var baseApiDBRepository: BaseApiDBRepository
         
         if testMode {
-            @Provider var baseApiWebRepository = MockCharacterWebRepository() as CharacterWebRepository
+            @Provider var charactersWebRepository = MockCharacterWebRepository() as CharacterWebRepository
             //@Provider var baseApiDDBBRepository = MockCharacterRepository() as BaseApiDBRepository
         } else {
             Task {
-                guard let charactersUrl = try baseApiDBRepository.getBaseApi()?.characters else {
-                    return
-                }
+                let charactersUrl = try baseApiDBRepository.getBaseApi()?.characters ?? UserDefaults.standard.baseApi?.characters
                 
-                @Provider var baseApiWebRepository = RealCharacterWebRepository(session: session, baseUrl: charactersUrl) as CharacterWebRepository
+                @Provider var charactersWebRepository = RealCharacterWebRepository(session: session, baseUrl: charactersUrl ?? "") as CharacterWebRepository
             }
             
             //@Provider var baseApiDDBBRepository = RealCharacterDBRepository() as BaseApiDBRepository
@@ -98,11 +110,9 @@ extension Dependencies {
             //@Provider var baseApiDDBBRepository = MockCharacterRepository() as BaseApiDBRepository
         } else {
             Task {
-                guard let locationsUrl = try baseApiDBRepository.getBaseApi()?.locations else {
-                    return
-                }
+                let locationsUrl = try baseApiDBRepository.getBaseApi()?.locations ?? UserDefaults.standard.baseApi?.locations
                 
-                @Provider var baseApiWebRepository = RealLocationsWebRepository(session: session, baseUrl: locationsUrl) as LocationsWebRepository
+                @Provider var baseApiWebRepository = RealLocationsWebRepository(session: session, baseUrl: locationsUrl ?? "") as LocationsWebRepository
             }
             
             //@Provider var baseApiDDBBRepository = RealCharacterDBRepository() as BaseApiDBRepository
